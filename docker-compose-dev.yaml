@@ -16,6 +16,7 @@ services:
       - "5000:3000"
       
   server-dev:
+    container_name: exam-project-server-dev-1
     build:
       context: ./server
 

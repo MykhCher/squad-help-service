@@ -16,6 +16,18 @@ const FieldFileInput = ({ classes, ...rest }) => {
           return '';
         };
 
+        const handleFileChange = (event) => {
+          const reader = new FileReader();
+          const file = event.currentTarget.files[0];
+
+          reader.onloadend = () => {
+            rest.setFieldValue(field.name, file);
+            document.getElementById('imagePreview').src = reader.result;
+          };
+
+          reader.readAsDataURL(file);
+        };
+
         return (
           <div className={fileUploadContainer}>
             <label htmlFor='fileInput' className={labelClass}>
@@ -24,11 +36,14 @@ const FieldFileInput = ({ classes, ...rest }) => {
             <span id='fileNameContainer' className={fileNameClass}>
               {getFileName()}
             </span>
+            <img id="imagePreview" alt="Image Preview" />
             <input
               {...field}
+              value={undefined}
               className={fileInput}
               id='fileInput'
               type='file'
+              onChange={handleFileChange}
             />
           </div>
         );
