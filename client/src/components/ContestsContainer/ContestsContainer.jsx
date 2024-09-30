@@ -1,43 +1,49 @@
-import React from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import styles from './ContestContainer.module.sass';
 import Spinner from '../Spinner/Spinner';
 
-class ContestsContainer extends React.Component {
-  componentDidMount () {
-    window.addEventListener('scroll', this.scrollHandler);
-  }
+function ContestsContainer(props)  {
 
-  componentWillUnmount () {
-    window.removeEventListener('scroll', this.scrollHandler);
-  }
+  const latestProps = useRef(props);
 
-  scrollHandler = () => {
+  useEffect(() => {
+    latestProps.current = props;
+  });
+
+  const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
       document.documentElement.offsetHeight
     ) {
-      if (this.props.haveMore) {
-        this.props.loadMore(this.props.children.length);
+      const currentProps = latestProps.current;
+      if (currentProps.haveMore) {
+        props.loadMore(currentProps.children.length);
       }
-    }
-  };
+    }}, [props.haveMore, props.loadMore, props.children.length])
+   
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler);
 
-  render () {
-    const { isFetching } = this.props;
-    if (!isFetching && this.props.children.length === 0) {
-      return <div className={styles.notFound}>Nothing not found</div>;
-    }
-    return (
-      <div>
-        {this.props.children}
-        {isFetching && (
-          <div className={styles.spinnerContainer}>
-            <Spinner />
-          </div>
-        )}
-      </div>
-    );
+    return () => {
+      window.removeEventListener('scroll', scrollHandler);
+    };
+  }, []); 
+
+  const { isFetching } = props;
+  if (!isFetching && props.children.length === 0) {
+    return <div className={styles.notFound}>Nothing not found</div>;
   }
+  return (
+    <div>
+      {props.children}
+      {isFetching && (
+        <div className={styles.spinnerContainer}>
+          <Spinner />
+        </div>
+      )}
+    </div>
+  );
+
 }
 
 export default ContestsContainer;
