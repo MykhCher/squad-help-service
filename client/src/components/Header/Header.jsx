@@ -7,6 +7,7 @@ import { getUser } from '../../store/slices/userSlice';
 import withRouter from '../../hocs/withRouter';
 import styles from './Header.module.sass';
 import CONSTANTS from '../../constants';
+import Logo from '../Logo';
 
 function Header(props) {
 
@@ -118,13 +119,7 @@ function Header(props) {
         </div>
       </div>
       <div className={styles.navContainer}>
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <img
-            src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-            className={styles.logo}
-            alt="blue_logo"
-          />
-        </Link>
+        <Logo />
         <div className={styles.leftNav}>
           <div className={styles.nav}>
             <ul>
