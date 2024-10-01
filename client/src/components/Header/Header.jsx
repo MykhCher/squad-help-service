@@ -1,22 +1,21 @@
-import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './Header.module.sass';
-import CONSTANTS from '../../constants';
+import { useEffect } from 'react';
+// =====
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import withRouter from '../../hocs/withRouter';
+import styles from './Header.module.sass';
+import CONSTANTS from '../../constants';
 
 function Header(props) {
-
-  console.log(props)
 
   useEffect(() => {
     if (!props.data) {
       props.getUser();
     }
   }, [])
-//
+
   const logOut = () => {
     localStorage.clear();
     props.clearUserStore();
@@ -119,11 +118,13 @@ function Header(props) {
         </div>
       </div>
       <div className={styles.navContainer}>
-        <img
-          src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-          className={styles.logo}
-          alt="blue_logo"
-        />
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <img
+            src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
+            className={styles.logo}
+            alt="blue_logo"
+          />
+        </Link>
         <div className={styles.leftNav}>
           <div className={styles.nav}>
             <ul>
