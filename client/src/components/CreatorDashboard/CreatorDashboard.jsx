@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import queryString from 'query-string';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
+import { connect } from 'react-redux';
+import queryString from 'query-string';
+import { useEffect, useRef } from 'react';
+// =====
 import {
   getContests,
   clearContestsList,
   setNewCreatorFilter,
 } from '../../store/slices/contestsSlice';
-import { getDataForContest } from '../../store/slices/dataForContestSlice';
-import withRouter from '../../hocs/withRouter';
-import ContestsContainer from '../ContestsContainer/ContestsContainer';
-import ContestBox from '../ContestBox/ContestBox';
-import styles from './CreatorDashboard.module.sass';
-import TryAgain from '../TryAgain/TryAgain';
 import CONSTANTS from '../../constants';
+import ContestBox from '../ContestBox/ContestBox';
+import ContestsContainer from '../ContestsContainer/ContestsContainer';
+import styles from './CreatorDashboard.module.sass';
+import withRouter from '../../hocs/withRouter';
+import TryAgain from '../TryAgain/TryAgain';
+import { getDataForContest } from '../../store/slices/dataForContestSlice';
 
 const types = [
   '',
@@ -29,20 +30,16 @@ const types = [
 
 function CreatorDashboard(props) {
 
+  const previousFilter = useRef(props.creatorFilter);
+
   useEffect(() => {
     parseUrlForParams(props.location.search)
+    previousFilter.current = props.creatorFilter;
   }, [props.location.search])
-
 
   useEffect(() => {
     props.getDataForContest();
-    if (
-      parseUrlForParams(props.location.search) &&
-      !props.contests.length
-    ) {
-      getContests(props.creatorFilter);
-    }
-  }, []);
+  }, [])
 
   const renderSelectType = () => {
     const array = [];
@@ -141,7 +138,7 @@ function CreatorDashboard(props) {
       ownEntries:
         typeof obj.ownEntries === 'undefined' ? false : obj.ownEntries,
     };
-    if (!isEqual(filter, props.creatorFilter)) {
+    if (!isEqual(filter, previousFilter)) {
       props.newFilter(filter);
       props.clearContestsList();
       getContests(filter);
@@ -152,7 +149,7 @@ function CreatorDashboard(props) {
 
   const getPredicateOfRequest = () => {
     const obj = {};
-    const { creatorFilter } = props;
+    const creatorFilter = previousFilter.current;
     Object.keys(creatorFilter).forEach((el) => {
       if (creatorFilter[el]) {
         obj[el] = creatorFilter[el];
