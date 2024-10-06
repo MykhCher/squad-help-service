@@ -1,10 +1,10 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { Form, Formik } from 'formik';
+import { Form, Formik, Field } from 'formik';
+import classNames from 'classnames';
+// =====
 import { sendMessage } from '../../../../store/slices/chatSlice';
 import styles from './ChatInput.module.sass';
 import CONSTANTS from '../../../../constants';
-import FormInput from '../../../FormInput/FormInput';
 import Schems from '../../../../utils/validators/validationSchems';
 
 const ChatInput = (props) => {
@@ -25,16 +25,27 @@ const ChatInput = (props) => {
         validationSchema={Schems.MessageSchema}
       >
         <Form className={styles.form}>
-          <FormInput
-            name="message"
-            type="text"
-            label="message"
-            classes={{
-              container: styles.container,
-              input: styles.input,
-              notValid: styles.notValid,
+          <Field name="message">
+            {props => {
+              const {field, meta: { touched, error }} = props;
+
+              const inputClassName = classNames(styles.input);
+
+              return (
+                <div className={styles.container}>
+
+                  <input
+                    name='message'
+                    type='text'
+                    placeholder="message"
+                    className={inputClassName}
+                    autoComplete='off'
+                    {...field}
+                  />
+                </div>
+              )
             }}
-          />
+          </Field>
           <button type="submit">
             <img
               src={`${CONSTANTS.STATIC_IMAGES_PATH}send.png`}
