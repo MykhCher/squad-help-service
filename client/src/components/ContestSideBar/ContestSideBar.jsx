@@ -1,6 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+// =====
 import styles from './ContestSideBar.module.sass';
 import CONSTANTS from '../../constants';
 

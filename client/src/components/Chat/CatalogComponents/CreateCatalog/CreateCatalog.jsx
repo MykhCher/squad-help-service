@@ -1,6 +1,7 @@
-import React from 'react';
+ 
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
+// =====
 import FormInput from '../../../FormInput/FormInput';
 import styles from './CreateCatalog.module.sass';
 import { createCatalog } from '../../../../store/slices/chatSlice';

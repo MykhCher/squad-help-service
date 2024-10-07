@@ -1,7 +1,7 @@
-import React from 'react';
 import classNames from 'classnames';
 import InputMask from 'react-input-mask';
 import { useField } from 'formik';
+
 
 const PayInput = props => {
   const { label, changeFocus, classes, isInputMask, mask } = props;

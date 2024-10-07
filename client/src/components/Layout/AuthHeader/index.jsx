@@ -1,8 +1,8 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+// =====
 import Logo from '../../Logo';
-import styles from './AuthHeader.module.sass';
 import CONSTANTS from '../../../constants';
+import styles from './AuthHeader.module.sass';
 
 const AuthHeader = () => {
   const { pathname } = useLocation();

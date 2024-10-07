@@ -1,11 +1,11 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+// =====
 import { updateBundle } from '../../store/slices/bundleSlice';
 import BundleBox from '../../components/BundleBox/BundleBox';
 import CONSTANTS from '../../constants';
-import styles from './StartContestPage.module.sass';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import styles from './StartContestPage.module.sass';
 
 const StartContestPage = props => {
   const navigate = useNavigate();

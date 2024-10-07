@@ -1,5 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
+// =====
 import {
   updateContest,
   clearContestUpdationStore,
@@ -7,9 +7,9 @@ import {
 import { changeEditContest } from '../../store/slices/contestByIdSlice';
 import withRouter from '../../hocs/withRouter';
 import ContestForm from '../ContestForm/ContestForm';
-import styles from './Brief.module.sass';
 import ContestInfo from '../Contest/ContestInfo/ContestInfo';
 import Error from '../Error/Error';
+import styles from './Brief.module.sass';
 
 const Brief = (props) => {
   const setNewContestData = (values) => {

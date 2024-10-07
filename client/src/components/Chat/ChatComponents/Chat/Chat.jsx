@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+// =====
 import DialogListContainer from '../../DialogComponents/DialogListContainer/DialogListContainer';
-import styles from './Chat.module.sass';
 import Dialog from '../../DialogComponents/Dialog/Dialog';
 import {
   changeChatShow,
@@ -17,6 +17,7 @@ import CatalogListContainer from '../../CatalogComponents/CatalogListContainer/C
 import CatalogCreation from '../../CatalogComponents/CatalogCreation/CatalogCreation';
 import CatalogListHeader from '../../CatalogComponents/CatalogListHeader/CatalogListHeader';
 import ChatError from '../../../ChatError/ChatError';
+import styles from './Chat.module.sass';
 
 function Chat(props) {
 

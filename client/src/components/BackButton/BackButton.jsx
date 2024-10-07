@@ -1,4 +1,3 @@
-import React from 'react';
 import withRouter from '../../hocs/withRouter';
 import styles from './BackButton.module.sass';
 

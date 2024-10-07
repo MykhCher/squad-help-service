@@ -1,7 +1,8 @@
-import React from 'react';
 import moment from 'moment';
+// =====
 import styles from './ContestBox.module.sass';
 import CONSTANTS from '../../constants';
+
 
 const ContestBox = props => {
   const getTimeStr = () => {

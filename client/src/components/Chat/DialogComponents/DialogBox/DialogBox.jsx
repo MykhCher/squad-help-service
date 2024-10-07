@@ -1,7 +1,8 @@
-import React from 'react';
 import classNames from 'classnames';
-import styles from './DialogBox.module.sass';
+// =====
 import CONSTANTS from '../../../../constants';
+import styles from './DialogBox.module.sass';
+
 
 const DialogBox = props => {
   const {

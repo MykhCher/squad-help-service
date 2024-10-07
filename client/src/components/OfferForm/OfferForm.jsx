@@ -1,6 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
+// =====
 import CONTANTS from '../../constants';
 import {
   addOffer,

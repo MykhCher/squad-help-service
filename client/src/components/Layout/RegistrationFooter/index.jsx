@@ -1,5 +1,5 @@
-import React from 'react';
 import styles from './RegistrationFooter.module.sass';
+
 
 const RegistrationFooter = () => {
   return (
