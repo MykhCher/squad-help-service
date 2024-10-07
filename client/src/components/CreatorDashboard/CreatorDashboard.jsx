@@ -30,7 +30,7 @@ const types = [
 
 function CreatorDashboard(props) {
 
-  const previousFilter = useRef(props.creatorFilter);
+  const previousFilter = useRef();
 
   useEffect(() => {
     parseUrlForParams(props.location.search)
@@ -138,7 +138,7 @@ function CreatorDashboard(props) {
       ownEntries:
         typeof obj.ownEntries === 'undefined' ? false : obj.ownEntries,
     };
-    if (!isEqual(filter, previousFilter)) {
+    if (!isEqual(filter, previousFilter.current)) {
       props.newFilter(filter);
       props.clearContestsList();
       getContests(filter);
