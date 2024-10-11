@@ -11,10 +11,11 @@ import StartContestPage from './pages/StartContestPage/StartContestPage';
 import ContestCreationPage from './pages/ContestCreation/ContestCreationPage';
 import ContestPage from './pages/ContestPage/ContestPage';
 import UserProfile from './pages/UserProfile/UserProfile';
+import HowItWorks from './pages/HowItWorks/HowItWorks';
 import Dashboard from './pages/Dashboard/Dashboard';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Payment from './pages/Payment/Payment';
-import HowItWorks from './pages/HowItWorks/HowItWorks';
+import Events from './pages/Events/Events';
 import Layout from './pages/Layout/Layout';
 import Home from './pages/Home/Home';
 // =====
@@ -83,6 +84,7 @@ function App() {
             <Route path="/contest/:id" element={<ContestPage />}/>
             <Route path="/account" element={<UserProfile />}/>
             <Route path="/how-it-works" element={<HowItWorks />}/>
+            <Route path="/events" element={<Events />}/>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

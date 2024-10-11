@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { FaRegBell } from "react-icons/fa";
 // =====
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
@@ -82,6 +83,11 @@ function Header(props) {
             className={styles.emailIcon}
             alt="email"
           />
+          <div className={styles.emailIcon}>
+            <Link to="/events" style={{ textDecoration: 'none' }} >
+              <FaRegBell />
+            </Link>
+          </div>
         </>
       );
     }
