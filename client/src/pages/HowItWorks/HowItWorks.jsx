@@ -19,7 +19,14 @@ function HowItWorks() {
             </div>
         </div>
         <div className={styles.step}>
-             <h2>some info</h2> 
+            <div className={styles.stepText}>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore beatae voluptas expedita vero excepturi vitae reprehenderit ducimus voluptate? Beatae exercitationem eius, doloremque est quasi aut nihil suscipit natus sunt voluptatum incidunt quam magnam earum sed minus numquam vero iusto blanditiis.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora totam inventore expedita dolorem perspiciatis, aut facere cumque recusandae labore eveniet soluta ea esse, iure voluptates harum quasi. Dicta corporis sapiente expedita quos, odio ut tenetur, illo consequuntur alias ipsum natus.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero culpa autem fugit, nostrum atque qui nemo? Deleniti possimus blanditiis accusantium similique voluptatem ullam aspernatur temporibus facere! Optio voluptates quibusdam officia!</p>
+            </div>
+            <div className={styles.stepImg}>
+                <p>image</p>
+            </div>
         </div>
         <div className={styles.afterStep}>
             <h2>What's Next?</h2>
