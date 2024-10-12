@@ -1,6 +1,7 @@
 import { useState } from 'react';
 // =====
 import EventTimer from '../../components/EventTimer/EventTimer';
+import EventForm from '../../components/EventForm/EventForm';
 
 function Events() {
 
@@ -8,8 +9,11 @@ function Events() {
 
     return (
         <>
-            <EventTimer />
-            <button onClick={() => setFilled(filled+1)}>Count is {filled}</button>
+            <div style={{textAlign: 'center'}}>
+                <EventTimer />
+                <button onClick={() => setFilled(filled+1)}>Count is {filled}</button>
+                <EventForm />
+            </div>
         </>
     );
 }
