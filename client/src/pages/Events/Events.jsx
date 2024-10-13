@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 // =====
 import EventTimer from '../../components/EventTimer/EventTimer';
 import EventForm from '../../components/EventForm/EventForm';
 
 function Events() {
 
-    const [filled, setFilled] = useState(0);
+    const [ timers, setTimers ] = useState([]);
+    const formRef = useRef();
+
+    const handleFormSubmit = values => {
+        setTimers([...timers, values])
+    }
 
     return (
         <>
             <div style={{textAlign: 'center'}}>
-                <EventTimer />
-                <button onClick={() => setFilled(filled+1)}>Count is {filled}</button>
-                <EventForm />
+                <EventForm 
+                    formRef={formRef}
+                    handleSubmit={handleFormSubmit}
+                />
+                <ul>
+                    {timers.map(timer => {
+                        return (<li key={timer}>
+                            <EventTimer {...timer} />
+                        </li>)
+                    })}
+                </ul>
             </div>
         </>
     );

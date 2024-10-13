@@ -6,11 +6,21 @@ const timerStyle = {
     }},
 }
 
-function EventTimer() {
+function EventTimer(props) {
+
+    const countTimerDuration = (sec) => {
+        const dateStart = new Date(Date.now()).getTime();
+        const dateFinish = sec?.getTime() ?? new Date(Date.now()).getTime();
+
+        const result = Math.floor((dateFinish-dateStart)/1000);
+
+        return result;
+    }
+
     return <ProgressTimer 
-        label="Something" 
-        duration={30} 
-        color='#6dcf7a'
+        label={props.title || 'My Event'} 
+        duration={countTimerDuration(props.eventTime) || 30} 
+        color='#000'
         classes={timerStyle}
     />
 }

@@ -1,16 +1,22 @@
 import { Formik, Form, Field } from 'formik';
+import { useState } from 'react';
 
-function EventForm() {
+function EventForm(props) {
+
+    const dateNow = new Date();
+    const initFormDate = `${dateNow.getFullYear()}-${dateNow.getMonth()+1}-${dateNow.getDate()}T${dateNow.getHours()}:${dateNow.getMinutes()}`;
+
+    const [formDate, setFormDate] = useState(initFormDate);
 
     return (
         <>
             <Formik
                 initialValues={{
-                    eventDateForm: '',
-                    eventTime: '',
+                    eventTime: new Date(),
                     title: ''
                 }}
-                onSubmit={values => console.log(values)}
+                onSubmit={props.handleSubmit}
+                innerRef={props.formRef}
             >
                 {({values, setFieldValue}) => (
                     <Form>
@@ -24,12 +30,12 @@ function EventForm() {
                                     aria-label="Date and time" 
                                     type="datetime-local" 
                                     onChange={({target: {value}}) => {
-                                        const newDate = new Date(value)
+                                        const newDate = new Date(value);
 
                                         setFieldValue('eventTime', newDate);
-                                        setFieldValue('eventDateForm', value);
+                                        setFormDate(value);
                                     }}
-                                    value={values.eventDateForm}
+                                    value={formDate}
                                 />
                             )}
                         </Field>
