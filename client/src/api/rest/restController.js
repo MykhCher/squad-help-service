@@ -36,6 +36,9 @@ export const getCustomersContests = data =>
     }
   );
 
+export const getEvents = () => http.get('events');
+export const createEvent = data => http.post('events', data); 
+
 export const getActiveContests = ({
   offset,
   limit,

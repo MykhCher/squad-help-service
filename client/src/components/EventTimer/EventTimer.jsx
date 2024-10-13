@@ -8,9 +8,17 @@ const timerStyle = {
 
 function EventTimer(props) {
 
-    const countTimerDuration = (sec) => {
-        const dateStart = new Date(Date.now()).getTime();
-        const dateFinish = sec?.getTime() ?? new Date(Date.now()).getTime();
+    const countTimerDuration = (obj) => {
+        const sec = obj.eventTime;
+
+        let dateFinish, dateStart;
+        if (typeof sec === 'string') {
+            dateFinish = new Date(sec).getTime();
+            dateStart = new Date(obj.createdAt).getTime();
+        } else {
+            dateFinish = sec?.getTime() ?? new Date(Date.now()).getTime();
+            dateStart = new Date(Date.now()).getTime();
+        }
 
         const result = Math.floor((dateFinish-dateStart)/1000);
 
@@ -19,7 +27,7 @@ function EventTimer(props) {
 
     return <ProgressTimer 
         label={props.title || 'My Event'} 
-        duration={countTimerDuration(props.eventTime) || 30} 
+        duration={countTimerDuration(props) || 30} 
         color='#000'
         classes={timerStyle}
     />
