@@ -1,13 +1,23 @@
 const express = require('express');
+// =====
 const basicMiddlewares = require('../middlewares/basicMiddlewares');
 const hashPass = require('../middlewares/hashPassMiddle');
-const userController = require('../controllers/userController');
-const contestController = require('../controllers/contestController');
 const checkToken = require('../middlewares/checkToken');
 const validators = require('../middlewares/validators');
+// =====
 const chatController = require('../controllers/chatController');
+const contestController = require('../controllers/contestController');
+const eventController = require('../controllers/eventController');
+const userController = require('../controllers/userController');
+// =====
 const upload = require('../utils/fileUpload');
+
+
 const router = express.Router();
+
+router.route('/events')
+  .get(checkToken.checkToken, eventController.getAllEvents)
+  .post(checkToken.checkToken, eventController.createEvent);
 
 router.post(
   '/registration',

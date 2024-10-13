@@ -33,6 +33,7 @@ module.exports.checkToken = async (req, res, next) => {
   }
   try {
     req.tokenData = jwt.verify(accessToken, CONSTANTS.JWT_SECRET);
+    console.log(req.tokenData)
     next();
   } catch (err) {
     next(new TokenError());
