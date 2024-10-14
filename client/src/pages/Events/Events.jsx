@@ -32,7 +32,7 @@ function Events() {
                 />
                 <ul>
                     {timers.map(timer => {
-                        return (<li key={timer}>
+                        return (<li key={timer.title}>
                             <EventTimer {...timer} />
                         </li>)
                     })}
