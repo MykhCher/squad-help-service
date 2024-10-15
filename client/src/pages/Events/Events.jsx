@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 // =====
-import { getEvents, createEvent } from '../../api/rest/restController';
+import { getEvents, createEvent, deleteEvent } from '../../api/rest/restController';
 import EventTimer from '../../components/EventTimer/EventTimer';
 import EventForm from '../../components/EventForm/EventForm';
+// =====
+import styles from './Events.module.sass';
 
 function Events() {
 
@@ -23,22 +25,29 @@ function Events() {
             .catch(err => console.log(err));
     }
 
+    const handleDelete = id => {
+        const newTimers = timers.filter(timer => timer.id !== id);
+        setTimers(newTimers);
+        
+        deleteEvent({id});
+    }
+
     return (
-        <>
-            <div style={{textAlign: 'center'}}>
-                <EventForm 
-                    formRef={formRef}
-                    handleSubmit={handleFormSubmit}
-                />
-                <ul>
-                    {timers.map(timer => {
-                        return (<li key={timer.title}>
-                            <EventTimer {...timer} />
-                        </li>)
-                    })}
-                </ul>
-            </div>
-        </>
+        <div className={styles.mainContainer}>
+                <div className={styles.timersContainer}>
+                    <ul>
+                        {timers.map(timer => (<li key={timer.id}>
+                            <EventTimer {...timer} deleteEvent={handleDelete} />
+                        </li>))}
+                    </ul>
+                </div>
+                <div className={styles.formContainer}>
+                    <EventForm 
+                        formRef={formRef}
+                        handleSubmit={handleFormSubmit}
+                    />
+                </div>
+        </div>
     );
 }
 

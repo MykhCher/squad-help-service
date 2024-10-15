@@ -38,6 +38,9 @@ export const getCustomersContests = data =>
 
 export const getEvents = () => http.get('events');
 export const createEvent = data => http.post('events', data); 
+export const deleteEvent = data => http.delete(`events/${data.id}`);
+export const setElapsedEvent = data => http.get(`events/${data.id}`);
+export const getNotifications = () => http.get('notify');
 
 export const getActiveContests = ({
   offset,

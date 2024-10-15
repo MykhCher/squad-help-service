@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+// =====
 import CONSTANTS from '../../constants';
 import styles from './Footer.module.sass';
 
@@ -5,11 +7,14 @@ function Footer() {
   const topFooterItemsRender = item => (
     <div key={item.title}>
       <h4>{item.title}</h4>
-      {item.items.map(i => (
-        <a key={i} href='https://google.com'>
-          {i}
-        </a>
-      ))}
+      {item.items.map(i => {
+        if (i === 'How It Works') return <Link key={i} to='/how-it-works'>{i}</Link>
+        return (
+          <a key={i} href='https://google.com'>
+            {i}
+          </a>
+        );
+      })}
     </div>
   );
 

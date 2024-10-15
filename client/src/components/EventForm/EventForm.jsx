@@ -4,9 +4,12 @@ import { useState } from 'react';
 function EventForm(props) {
 
     const dateNow = new Date();
-    const initFormDate = `${dateNow.getFullYear()}-${dateNow.getMonth()+1}-${dateNow.getDate()}T${dateNow.getHours()}:${dateNow.getMinutes()}`;
+    const setInitFormDate = () => {
+        const m = dateNow.getMinutes()
+        return `${dateNow.getFullYear()}-${dateNow.getMonth()+1}-${dateNow.getDate()}T${dateNow.getHours()}:${m < 10 ? `0${m}` : m}`;
+    }
 
-    const [formDate, setFormDate] = useState(initFormDate);
+    const [formDate, setFormDate] = useState(setInitFormDate());
 
     return (
         <>
@@ -20,38 +23,42 @@ function EventForm(props) {
             >
                 {({values, setFieldValue}) => (
                     <Form>
-                        <Field
-                            name="eventDate"
-                        >
-                            {({field}) => (
-                                <input 
-                                    {...field}
-                                    id="eventDate"
-                                    aria-label="Date and time" 
-                                    type="datetime-local" 
-                                    onChange={({target: {value}}) => {
-                                        const newDate = new Date(value);
+                        <div>
+                            <Field
+                                name="eventDate"
+                            >
+                                {({field}) => (
+                                    <input 
+                                        {...field}
+                                        id="eventDate"
+                                        aria-label="Date and time" 
+                                        type="datetime-local" 
+                                        onChange={({target: {value}}) => {
+                                            const newDate = new Date(value);
 
-                                        setFieldValue('eventTime', newDate);
-                                        setFormDate(value);
-                                    }}
-                                    value={formDate}
-                                />
-                            )}
-                        </Field>
-                        <Field
-                            name="title"
-                        >
-                            {({field}) => (
-                                <input 
-                                    {...field}
-                                    id='title'
-                                    type='text'
-                                    onChange={({target: {value}}) => setFieldValue('title', value)}
-                                    value={values.title}
-                                />
-                            )}
-                        </Field>
+                                            setFieldValue('eventTime', newDate);
+                                            setFormDate(value);
+                                        }}
+                                        value={formDate}
+                                    />
+                                )}
+                            </Field>
+                        </div>
+                        <div>
+                            <Field
+                                name="title"
+                            >
+                                {({field}) => (
+                                    <input 
+                                        {...field}
+                                        id='title'
+                                        type='text'
+                                        onChange={({target: {value}}) => setFieldValue('title', value)}
+                                        value={values.title}
+                                    />
+                                )}
+                            </Field>
+                        </div>
                         
                         <button type="submit">Submit</button>
                     </Form>

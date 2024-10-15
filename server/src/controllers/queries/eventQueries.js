@@ -18,11 +18,7 @@ module.exports.getEvents = async (id) => {
             }
         });
 
-        const output = events.filter(event => {
-            return (new Date(event.eventTime).getTime() - Date.now() > 0);
-        });
-
-        return output;
+        return events;
     } catch(error) {
         console.log(error);
     }
@@ -46,4 +42,28 @@ module.exports.setElapsedEvent = async id => {
     } catch(error) {
         console.log(error);
     }
+}
+
+module.exports.checkEventOwner = async (id, userId) => {
+    try {
+        const event = await Events.findByPk(id);
+        return event.userId === userId;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports.notifyEvents = async (userId) => {
+    const events = await Events.findAll({
+        where: {
+            userId,
+            elapsed: false
+        }
+    });        
+    
+    const output = events.filter(event => {
+        return (new Date(event.eventTime).getTime() - Date.now() <= 0);
+    });
+
+    return output.length;
 }

@@ -19,6 +19,12 @@ router.route('/events')
   .get(checkToken.checkToken, eventController.getAllEvents)
   .post(checkToken.checkToken, eventController.createEvent);
 
+router.route('/events/:id')
+  .delete(checkToken.checkToken, eventController.deleteEvent)
+  .get(checkToken.checkToken, eventController.setElapsedEvent);
+
+router.get('/notify', checkToken.checkToken, eventController.getNotifications);
+
 router.post(
   '/registration',
   validators.validateRegistrationData,
