@@ -33,7 +33,9 @@ function Events() {
     }
 
     return (
-        <div className={styles.mainContainer}>
+        <>
+            <h1>Events</h1>
+            <div className={styles.mainContainer}>
                 <div className={styles.timersContainer}>
                     <ul>
                         {timers.map(timer => (<li key={timer.id}>
@@ -47,7 +49,8 @@ function Events() {
                         handleSubmit={handleFormSubmit}
                     />
                 </div>
-        </div>
+            </div>
+        </>
     );
 }
 

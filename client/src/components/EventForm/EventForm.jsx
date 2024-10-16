@@ -1,5 +1,8 @@
 import { Formik, Form, Field } from 'formik';
 import { useState } from 'react';
+// =====
+import styles from './EventForm.module.sass';
+
 
 function EventForm(props) {
 
@@ -13,6 +16,7 @@ function EventForm(props) {
 
     return (
         <>
+            <h2>Create Event:</h2>
             <Formik
                 initialValues={{
                     eventTime: new Date(),
@@ -23,7 +27,8 @@ function EventForm(props) {
             >
                 {({values, setFieldValue}) => (
                     <Form>
-                        <div>
+                        <div className={styles.inputContainer}>
+                            <label htmlFor="eventDate">Time for event:</label>
                             <Field
                                 name="eventDate"
                             >
@@ -31,6 +36,7 @@ function EventForm(props) {
                                     <input 
                                         {...field}
                                         id="eventDate"
+                                        className={styles.formInput}
                                         aria-label="Date and time" 
                                         type="datetime-local" 
                                         onChange={({target: {value}}) => {
@@ -44,7 +50,8 @@ function EventForm(props) {
                                 )}
                             </Field>
                         </div>
-                        <div>
+                        <div className={styles.inputContainer}>
+                            <label htmlFor="title">Event name:</label>
                             <Field
                                 name="title"
                             >
@@ -52,6 +59,8 @@ function EventForm(props) {
                                     <input 
                                         {...field}
                                         id='title'
+                                        className={styles.formInput}
+                                        placeholder='My Event'
                                         type='text'
                                         onChange={({target: {value}}) => setFieldValue('title', value)}
                                         value={values.title}
@@ -60,7 +69,7 @@ function EventForm(props) {
                             </Field>
                         </div>
                         
-                        <button type="submit">Submit</button>
+                        <button type="submit" className={styles.submitBtn}>Create timer</button>
                     </Form>
                 )}
                 
