@@ -11,23 +11,28 @@ function Events() {
     const [ timers, setTimers ] = useState([]);
     const formRef = useRef();
 
+    const setSortedTimers = (arr) => {
+        const newTimers = arr.sort((a, b) => new Date(a.eventTime).getTime()-new Date(b.eventTime).getTime());
+        setTimers(newTimers);
+    } 
+
     useEffect(() => {
         getEvents()
-            .then(({ data }) => setTimers(data))
+            .then(({ data }) => setSortedTimers(data))
             .catch(err => console.log('Error: ', err));
     }, [])
 
     const handleFormSubmit = values => {
         createEvent(values)
             .then(({ data }) => {
-                setTimers([...timers, data]);
+                setSortedTimers([...timers, data]);
             })
             .catch(err => console.log(err));
     }
 
     const handleDelete = id => {
         const newTimers = timers.filter(timer => timer.id !== id);
-        setTimers(newTimers);
+        setSortedTimers(newTimers);
         
         deleteEvent({id});
     }
