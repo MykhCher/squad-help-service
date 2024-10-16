@@ -1,7 +1,8 @@
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useState } from 'react';
 // =====
 import styles from './EventForm.module.sass';
+import Schems from '../../utils/validators/validationSchems';
 
 
 function EventForm(props) {
@@ -24,8 +25,9 @@ function EventForm(props) {
                 }}
                 onSubmit={props.handleSubmit}
                 innerRef={props.formRef}
+                validationSchema={Schems.EventSchem}
             >
-                {({values, setFieldValue}) => (
+                {({values, setFieldValue, errors, touched}) => (
                     <Form>
                         <div className={styles.inputContainer}>
                             <label htmlFor="eventDate">Time for event:</label>
@@ -49,6 +51,7 @@ function EventForm(props) {
                                     />
                                 )}
                             </Field>
+                            <ErrorMessage className={styles.errorMsg} name="eventTime" component='span'/>
                         </div>
                         <div className={styles.inputContainer}>
                             <label htmlFor="title">Event name:</label>
@@ -67,8 +70,11 @@ function EventForm(props) {
                                     />
                                 )}
                             </Field>
+                            {errors.title && touched.title ? (
+                                <div>{errors.title}</div>
+                            ) : null}
+                            <ErrorMessage className={styles.errorMsg} name="title" component='span'/>
                         </div>
-                        
                         <button type="submit" className={styles.submitBtn}>Create timer</button>
                     </Form>
                 )}

@@ -2,6 +2,14 @@ import * as yup from 'yup';
 import valid from 'card-validator';
 
 export default {
+  EventSchem: yup.object().shape({
+    title: yup
+      .string()
+      .trim(),
+    eventTime: yup
+      .date()
+      .min(new Date(Date.now() + 1000), 'Event date must be later than current date')
+  }),
   LoginSchem: yup.object().shape({
     email: yup
       .string()
