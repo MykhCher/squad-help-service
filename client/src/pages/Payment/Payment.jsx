@@ -9,6 +9,7 @@ import styles from './Payment.module.sass';
 
 const Payment = (props) => {
   const navigate = useNavigate();
+  console.log(props)
 
   const pay = (values) => {
     const { contests } = props.contestCreationStore;

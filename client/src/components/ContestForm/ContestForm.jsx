@@ -14,6 +14,7 @@ import TryAgain from '../TryAgain/TryAgain';
 import Schems from '../../utils/validators/validationSchems';
 import OptionalSelects from '../OptionalSelects/OptionalSelects';
 import styles from './ContestForm.module.sass';
+import ButtonGroup from '../ButtonGroup/ButtonGroup';
 
 const variableOptions = {
   [CONSTANTS.NAME_CONTEST]: {
@@ -37,7 +38,6 @@ function ContestForm(props) {
   const isEditContest = useSelector((state) => state.contestByIdStore.isEditContest);
   const dataForContest = useSelector((state) => state.dataForContest);
   const initialValues = props.defaultData;
-  // const contestCreationStore = useSelector((state) => state.contestCreationStore);
 
   const getData = (data) => dispatch(getDataForContest(data));
 
@@ -83,6 +83,7 @@ function ContestForm(props) {
             focusOfWork: '',
             targetCustomer: '',
             file: '',
+            domain: '',
             ...variableOptions[props.contestType],
             ...initialValues,
           }}
@@ -153,6 +154,7 @@ function ContestForm(props) {
                   />
                 </div>
                 <OptionalSelects {...props} dataForContest={dataForContest} />
+                <ButtonGroup name="domain" {...fProps}/>
                 <FieldFileInput
                   name="file"
                   classes={{
