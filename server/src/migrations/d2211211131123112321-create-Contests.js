@@ -85,6 +85,9 @@ module.exports = {
           key: 'id',
         },
       },
+      domain: {
+        type: Sequelize.DataTypes.ENUM('allowMinorVariations', 'exactMatch', 'noDomain')
+      }
     });
   },
   down: (queryInterface, Sequelize) => {

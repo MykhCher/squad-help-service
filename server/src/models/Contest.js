@@ -84,6 +84,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
+    domain: {
+      type: DataTypes.ENUM('allowMinorVariations', 'exactMatch', 'noDomain'),
+    }
   },
   {
     timestamps: false,

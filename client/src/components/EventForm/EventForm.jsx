@@ -75,7 +75,7 @@ function EventForm(props) {
                             ) : null}
                             <ErrorMessage className={styles.errorMsg} name="title" component='span'/>
                         </div>
-                        <button type="submit" className={styles.submitBtn}>Create timer</button>
+                        <button type="submit" className={styles.submitBtn}>Create</button>
                     </Form>
                 )}
                 

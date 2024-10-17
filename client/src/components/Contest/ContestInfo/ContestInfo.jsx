@@ -20,8 +20,21 @@ const ContestInfo = props => {
     originalFileName,
     fileName,
     User,
+    domain,
     status,
   } = contestData;
+
+  const renderDomain = () => {
+    switch (domain) {
+      case 'allowMinorVariations':
+        return 'Allow Minor Variations';
+      case 'exactMatch':
+        return 'Exact Match';
+      case 'noDomain':
+        return 'No Domain Required';
+    }
+  }
+
   return (
     <div className={styles.mainContestInfoContainer}>
       <div className={styles.infoContainer}>
@@ -77,6 +90,11 @@ const ContestInfo = props => {
         <div className={styles.dataContainer}>
           <span className={styles.label}>Industry of company</span>
           <span className={styles.data}>{industry}</span>
+        </div>
+        
+        <div className={styles.dataContainer}>
+          <span className={styles.label}>Domain</span>
+          <span className={styles.data}>{renderDomain()}</span>
         </div>
         {originalFileName && (
           <div className={styles.dataContainer}>

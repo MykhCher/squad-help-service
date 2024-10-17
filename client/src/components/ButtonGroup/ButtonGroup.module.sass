@@ -10,7 +10,11 @@
     display: flex
     margin-top: 15px
 
+    @media(max-width: 800px)
+        flex-direction: column
+        
     .option
+        position: relative 
         display: inline-block
         padding: 25px 30px
         border: 2px solid #ccc
@@ -18,13 +22,52 @@
         margin-right: 10px
         cursor: pointer
         transition: border 0.3s
+        @media(max-width: 800px)
+            width: 250px
+            margin-top: 10px
+
+
+        .recommended
+            position: absolute
+            top: -10px
+            left: 95px
+            background-color: #edf8ff
+            color: #666
+            padding: 8px 10px
+            border-radius: 12px
+            font-size: 12px
+            font-weight: bold
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+            transition: color 0.3s, background-color 0.3s
+            @media(max-width: 1100px)
+                left: 55px
+            @media(max-width: 800px)
+                left: 95px
+             
 
         .header
             font-weight: 600
             font-size: 1.3em
             transition: color 0.3s
+            color: #0009
 
         .description
             display: block
             color: #0009
             margin-top: 12px
+
+        .radioBtn
+            position: absolute
+            opacity: 0
+            pointerEvents: 0
+
+    
+    .clicked
+        border-color: blue 
+
+        .recommended
+            background-color: #e0f3ff
+            color: #1976d2
+        
+        .header 
+            color: inherit
