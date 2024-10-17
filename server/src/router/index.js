@@ -5,6 +5,7 @@ const hashPass = require('../middlewares/hashPassMiddle');
 const checkToken = require('../middlewares/checkToken');
 const validators = require('../middlewares/validators');
 // =====
+const { findWord } = require('../controllers/messagesController');
 const chatController = require('../controllers/chatController');
 const contestController = require('../controllers/contestController');
 const eventController = require('../controllers/eventController');
@@ -24,6 +25,8 @@ router.route('/events/:id')
   .get(checkToken.checkToken, eventController.setElapsedEvent);
 
 router.get('/notify', checkToken.checkToken, eventController.getNotifications);
+
+router.get('/count-msg', findWord);
 
 router.post(
   '/registration',
