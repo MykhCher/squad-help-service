@@ -22,6 +22,7 @@ function ButtonGroup({ name, values: { domain }, ...rest }) {
               >
                 <p className={styles.recommended}>Recommended</p>
                 <Field type="radio" name={name} value="allowMinorVariations" className={styles.radioBtn} />
+                <span className={classNames(styles.checkMark, {[styles.clicked]: domain==='allowMinorVariations'})}>&#10003;</span>
                 <span className={styles.header}>Yes</span> 
                 <span className={styles.description}>But minor variations are allowed</span>
               </label>
@@ -31,6 +32,7 @@ function ButtonGroup({ name, values: { domain }, ...rest }) {
                 className={classNames(styles.option, {[styles.clicked]: domain==='exactMatch'})}
               >
                 <Field type="radio" name={name} value="exactMatch" className={styles.radioBtn} />
+                <span className={classNames(styles.checkMark, {[styles.clicked]: domain==='exactMatch'})}>&#10003;</span>
                 <span className={styles.header}>Yes</span> 
                 <span className={styles.description}>The domain should exactly match the name</span>
               </label>
@@ -40,6 +42,7 @@ function ButtonGroup({ name, values: { domain }, ...rest }) {
                 className={classNames(styles.option, {[styles.clicked]: domain==='noDomain'})}
               >
                 <Field type="radio" name={name} value="noDomain" className={styles.radioBtn} />
+                <span className={classNames(styles.checkMark, {[styles.clicked]: domain==='noDomain'})}>&#10003;</span>
                 <span className={styles.header}>No</span> 
                 <span className={styles.description}>I am only looking for a {rest.initialValues.contestType}, not a domain</span>
               </label>
