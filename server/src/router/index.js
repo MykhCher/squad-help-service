@@ -10,6 +10,7 @@ const chatController = require('../controllers/chatController');
 const contestController = require('../controllers/contestController');
 const eventController = require('../controllers/eventController');
 const userController = require('../controllers/userController');
+const SQLController = require('../controllers/sqlControllers');
 // =====
 const upload = require('../utils/fileUpload');
 
@@ -27,6 +28,10 @@ router.route('/events/:id')
 router.get('/notify', checkToken.checkToken, eventController.getNotifications);
 
 router.get('/count-msg', findWord);
+
+router.get('/count-roles', SQLController.countUsersByRoles);
+router.get('/pay-cashback', SQLController.payCashback);
+router.get('/pay-award', SQLController.payAward);
 
 router.post(
   '/registration',
