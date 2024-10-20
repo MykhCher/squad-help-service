@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Event.associate = function (models) {
-        Event.belongsTo(models.User, { foreignKey: 'user_id', sourceKey: 'id' });
+        Event.belongsTo(models.Users, { foreignKey: 'user_id', targetKey: 'id' });
     };
   
     return Event;
