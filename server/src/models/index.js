@@ -29,6 +29,8 @@ Object.keys(db).forEach(key => {
   }
 });
 
+sequelize.sync();
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

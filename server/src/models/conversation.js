@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       conversation.belongsToMany(models.Users, {
         through: 'usersConversations', 
         foreignKey: 'conversationId',
-        otherKey: 'userId'  
+        otherKey: 'userId'
       });
       conversation.hasMany(models.message, {foreignKey: 'conversationId', sourceKey: 'id'});
     }
