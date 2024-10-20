@@ -8,9 +8,12 @@ const controller = require('../socketInit');
 const _ = require('lodash');
 
 module.exports.addMessage = async (req, res, next) => {
+
   const participants = [req.tokenData.userId, req.body.recipient];
+
   participants.sort(
     (participant1, participant2) => participant1 - participant2);
+    
   try {
     const newConversation = await Conversation.findOneAndUpdate({
       participants,
@@ -22,15 +25,20 @@ module.exports.addMessage = async (req, res, next) => {
       setDefaultsOnInsert: true,
       useFindAndModify: false,
     });
+
     const message = new Message({
       sender: req.tokenData.userId,
       body: req.body.messageBody,
       conversation: newConversation._id,
     });
+
     await message.save();
+
     message._doc.participants = participants;
+
     const interlocutorId = participants.filter(
       (participant) => participant !== req.tokenData.userId)[ 0 ];
+
     const preview = {
       _id: newConversation._id,
       sender: req.tokenData.userId,
@@ -40,6 +48,7 @@ module.exports.addMessage = async (req, res, next) => {
       blackList: newConversation.blackList,
       favoriteList: newConversation.favoriteList,
     };
+
     controller.getChatController().emitNewMessage(interlocutorId, {
       message,
       preview: {
@@ -60,6 +69,7 @@ module.exports.addMessage = async (req, res, next) => {
         },
       },
     });
+
     res.send({
       message,
       preview: Object.assign(preview, { interlocutor: req.body.interlocutor }),

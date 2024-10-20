@@ -54,16 +54,16 @@ module.exports.checkEventOwner = async (id, userId) => {
 }
 
 module.exports.notifyEvents = async (userId) => {
-    const events = await Events.findAll({
-        where: {
-            userId,
-            elapsed: false
-        }
-    });        
+    // const events = await Events.findAll({
+    //     where: {
+    //         userId,
+    //         elapsed: false
+    //     }
+    // });        
     
-    const output = events.filter(event => {
-        return (new Date(event.eventTime).getTime() - Date.now() <= 0);
-    });
+    // const output = events.filter(event => {
+    //     return (new Date(event.eventTime).getTime() - Date.now() <= 0);
+    // });
 
-    return output.length;
+    return 0;
 }

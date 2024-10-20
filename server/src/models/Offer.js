@@ -40,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Offer.associate = function (models) {
-    Offer.belongsTo(models.Users, { foreignKey: 'user_id', targetKey: 'id' });
-    Offer.belongsTo(models.Contests, { foreignKey: 'contest_id', targetKey: 'id' });
+    Offer.belongsTo(models.Users, { foreignKey: 'userId', targetKey: 'id' });
+    Offer.belongsTo(models.Contests, { foreignKey: 'contestId', targetKey: 'id' });
     Offer.hasOne(models.Ratings, { foreignKey: 'offerId', sourceKey: 'id' });
   };
 
