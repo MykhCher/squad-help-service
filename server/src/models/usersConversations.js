@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { blackList } = require('../controllers/chatController');
 
 module.exports = (sequelize, DataTypes) => {
   class usersConversations extends Model {
@@ -12,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   usersConversations.init({
     userId: DataTypes.INTEGER,
     conversationId: DataTypes.INTEGER,
-    amount: DataTypes.INTEGER
+    blackList: DataTypes.BOOLEAN,
+    favoriteList: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'usersConversations',

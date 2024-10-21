@@ -23,6 +23,14 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         primaryKey: true
+      },
+      blackList: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      favoriteList: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       }
     })
   },
