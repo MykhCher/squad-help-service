@@ -29,7 +29,7 @@ Object.keys(db).forEach(key => {
   }
 });
 
-sequelize.sync();
+// sequelize.sync();
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

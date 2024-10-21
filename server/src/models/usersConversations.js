@@ -1,6 +1,5 @@
 'use strict';
 const { Model } = require('sequelize');
-const { blackList } = require('../controllers/chatController');
 
 module.exports = (sequelize, DataTypes) => {
   class usersConversations extends Model {

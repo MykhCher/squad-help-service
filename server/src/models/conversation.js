@@ -15,8 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   conversation.init({
-    blackList: DataTypes.ARRAY(DataTypes.BOOLEAN),
-    favoriteList: DataTypes.ARRAY(DataTypes.BOOLEAN)
   }, {
     sequelize,
     modelName: 'conversation',

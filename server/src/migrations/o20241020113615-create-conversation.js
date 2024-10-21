@@ -9,12 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      blackList: {
-        type: Sequelize.ARRAY(Sequelize.BOOLEAN)
-      },
-      favoriteList: {
-        type: Sequelize.ARRAY(Sequelize.BOOLEAN)
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
