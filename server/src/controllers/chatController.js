@@ -1,5 +1,5 @@
 const Conversation = require('../models/mongoModels/conversation');
-const { message } = require('../models');
+const { message, conversation } = require('../models');
 const Message = require('../models/mongoModels/Message');
 const Catalog = require('../models/mongoModels/Catalog');
 const db = require('../models');
@@ -18,9 +18,15 @@ module.exports.addMessage = async (req, res, next) => {
   
     const blackList = [];
     const favoriteList = [];
-    convo.Users.forEach(user => {
-      blackList.push(user.usersConversations.blackList);
-      favoriteList.push(user.usersConversations.favoriteList);
+    convo.Users.forEach(async user => {
+      const rel = await db.usersConversations.findOne({
+        where: {
+          userId: user.dataValues.id, 
+          conversationId: convo.dataValues.id
+        }});
+
+      blackList.push(rel.blackList);
+      favoriteList.push(rel.favoriteList);
     });
   
     const msg = new message({
@@ -37,19 +43,19 @@ module.exports.addMessage = async (req, res, next) => {
       _id: convo.id,
       sender: req.tokenData.userId,
       text: messageBody,
-      createdAt: message.dataValues.createdAt,
+      createdAt: msg.dataValues.createdAt,
       participants,
       blackList,
       favoriteList,
     };
   
     controller.getChatController().emitNewMessage(recipient, {
-      message,
+      message: msg,
       preview: {
         _id: convo.id,
         sender: req.tokenData.userId,
         text: messageBody,
-        createAt: message.dataValues.createdAt,
+        createAt: msg.dataValues.createdAt,
         participants,
         blackList,
         favoriteList,
@@ -65,7 +71,7 @@ module.exports.addMessage = async (req, res, next) => {
     });
   
     res.send({
-      message,
+      message: msg,
       preview: Object.assign(preview, { interlocutor: req.body.interlocutor }),
     });
   } catch (err) {
@@ -76,7 +82,7 @@ module.exports.addMessage = async (req, res, next) => {
 
 module.exports.getChat = async (req, res, next) => {
 
-  const { tokenData: {id: sender}, body: { interlocutorId: recipient } } = req;
+  const { tokenData: {userId: sender}, body: { interlocutorId: recipient } } = req;
   const participants = [sender, recipient];
 
   try {
@@ -104,10 +110,15 @@ module.exports.getChat = async (req, res, next) => {
 
 module.exports.test = async (req, res, next) => {
   try {
-    // getPreview with sequelize
+
+    const conversations = await chatQueries.getPreviews(req.tokenData.userId);
+
+    res.json(conversations);
+
   } catch (error) {
     console.log(error)
   }
+  
 }
 
 module.exports.getPreview = async (req, res, next) => {
