@@ -1,4 +1,5 @@
-const { conversation, usersConversations, Users, message, Sequelize: { Op } } = require("../../models");
+const { conversation, usersConversations, Users, message, Sequelize: { Op, literal } } = require("../../models");
+const db = require("../../models");
 
 const findConvoByUsers = async (participants) => {
   const [senderConvos, receiverConvos] = await Promise.all(participants.map(async id => {
@@ -9,13 +10,13 @@ const findConvoByUsers = async (participants) => {
 
   if (!senderConvos[0] || !receiverConvos[0]) return null;
 
-  const [[convo]] = senderConvos.map(item => {
+  const convo = senderConvos.map(item => {
     return receiverConvos.filter(value => {
       return item.dataValues.id === value.dataValues.id;
     })
   })
 
-  return convo;
+  return convo.flat()[0];
 }
 
 module.exports.findConvoByUsers = findConvoByUsers;
@@ -59,28 +60,6 @@ module.exports.findMessages = async (participants) => {
 } 
 
 module.exports.getPreviews = async (userId) => {
-  // const previews = await message.findAll({
-  //   include: [
-  //     {
-  //       model: conversation,
-  //       attributes: [], 
-  //       include: [
-  //         {
-  //           model: Users,
-  //           where: {
-  //             id: userId, 
-  //           },
-  //           through: {
-  //             model: usersConversations,
-  //             attributes: ['blackList', 'favoriteList'], 
-  //           },
-  //           attributes: [], 
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   order: [['createdAt', 'DESC']], 
-  // });
   const conversations = await conversation.findAll({
     include: [{
       model: Users,
@@ -95,9 +74,40 @@ module.exports.getPreviews = async (userId) => {
 
   const convoIds = conversations.map(convo => convo.id);
 
+  // const previews = await message.findAll({
+  //   attributes: [literal(`DISTINCT ON("conversationId") "body"`), 'body', 'createdAt', 'sender', 'id'],
+  //   where: {
+  //     conversationId: { [Op.in]: convoIds },
+  //   },
+  //   include: [{
+  //     model: conversation,
+  //     attributes: ['id'],
+  //     include: [{
+  //       model: Users,
+  //       through: { attributes: ['blackList', 'favoriteList'] },
+  //       attributes: ['id']
+  //     }]
+  //   }],
+  //   limit: convoIds.length
+  // });
+
+  // const test = await message.findAll({
+  //   attributes: [
+  //     [db.Sequelize.fn('max', db.Sequelize.col('createdAt')), 'createdAt'], 'conversationId'
+  //   ],
+  //   group: 'conversationId'
+  // });
+
   const previews = await message.findAll({
-    attributes: ['conversationId', 'body', 'createdAt', 'sender'],
+    attributes: ['id', 'body', 'sender', 'conversationId', 'createdAt'], // Select all required fields
     where: {
+      createdAt: {
+        [Op.eq]: db.Sequelize.literal(`(
+          SELECT MAX(m."createdAt")
+          FROM messages AS m
+          WHERE m."conversationId" = message."conversationId"
+        )`)
+      },
       conversationId: { [Op.in]: convoIds },
     },
     include: [{
@@ -109,8 +119,6 @@ module.exports.getPreviews = async (userId) => {
         attributes: ['id']
       }]
     }],
-    order: [['createdAt', 'DESC'], ['conversationId', 'DESC']],
-    limit: convoIds.length
   });
 
   return previews;

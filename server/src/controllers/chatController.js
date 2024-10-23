@@ -108,70 +108,50 @@ module.exports.getChat = async (req, res, next) => {
 }
 
 
-module.exports.test = async (req, res, next) => {
-  try {
-
-    const conversations = await chatQueries.getPreviews(req.tokenData.userId);
-
-    res.json(conversations);
-
-  } catch (error) {
-    console.log(error)
-  }
-  
-}
-
 module.exports.getPreview = async (req, res, next) => {
   try {
-    const conversations = await Message.aggregate([
-      {
-        $lookup: {
-          from: 'conversations',
-          localField: 'conversation',
-          foreignField: '_id',
-          as: 'conversationData',
-        },
-      },
-      {
-        $unwind: '$conversationData',
-      },
-      {
-        $match: {
-          'conversationData.participants': req.tokenData.userId,
-        },
-      },
-      {
-        $sort: {
-          createdAt: -1,
-        },
-      },
-      {
-        $group: {
-          _id: '$conversationData._id',
-          sender: { $first: '$sender' },
-          text: { $first: '$body' },
-          createAt: { $first: '$createdAt' },
-          participants: { $first: '$conversationData.participants' },
-          blackList: { $first: '$conversationData.blackList' },
-          favoriteList: { $first: '$conversationData.favoriteList' },
-        },
-      },
-    ]);
+
+    // Get list of first messages from every conversation
+    const conversations = await chatQueries.getPreviews(req.tokenData.userId);
+    // console.log(conversations)
+
+    // Set list of senders
     const interlocutors = [];
-    conversations.forEach(conversation => {
-      interlocutors.push(conversation.participants.find(
-        (participant) => participant !== req.tokenData.userId));
+    conversations.forEach(item => {
+      const participants = [];
+      const blackList = [];
+      const favoriteList = [];
+
+      item.conversation.Users.forEach(user => {
+          participants.push(user.id); 
+          blackList.push(user.usersConversations.blackList);
+          favoriteList.push(user.usersConversations.favoriteList);
+      });
+
+      item.dataValues.participants = participants;
+      item.dataValues.blackList = blackList;
+      item.dataValues.favoriteList = favoriteList;
+      item.dataValues.text = item.dataValues.body;
+       
+      interlocutors.push(
+        participants.find(participant => participant !== req.tokenData.userId)
+      );
     });
+
     const senders = await db.Users.findAll({
       where: {
         id: interlocutors,
       },
       attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
     });
-    conversations.forEach((conversation) => {
+
+    // Set sender info into response
+    conversations.forEach(item => {
+      const participants = item.conversation.Users.map(user => user.id);
+      item.dataValues.participants = participants;
       senders.forEach(sender => {
-        if (conversation.participants.includes(sender.dataValues.id)) {
-          conversation.interlocutor = {
+        if (participants.includes(sender.dataValues.id)) {
+          item.dataValues.interlocutor = {
             id: sender.dataValues.id,
             firstName: sender.dataValues.firstName,
             lastName: sender.dataValues.lastName,
@@ -181,11 +161,19 @@ module.exports.getPreview = async (req, res, next) => {
         }
       });
     });
+
     res.send(conversations);
-  } catch (err) {
-    next(err);
+
+  } catch (error) {
+    console.log(error)
   }
-};
+  
+}
+
+module.exports.test = async (req, res) => {
+  res.json(await chatQueries.getPreviews(1));
+}
+
 
 module.exports.blackList = async (req, res, next) => {
   const predicate = 'blackList.' +

@@ -52,7 +52,11 @@ const DialogList = (props) => {
       removeChat,
       interlocutor,
     } = props;
-    preview.forEach((chatPreview, index) => {
+    const prevArr = preview.slice();
+    prevArr.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    })
+    prevArr.forEach((chatPreview, index) => {
       const dialogNode = (
         <DialogBox
           interlocutor={chatPreview.interlocutor}
