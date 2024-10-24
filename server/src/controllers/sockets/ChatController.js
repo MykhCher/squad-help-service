@@ -26,7 +26,6 @@ class ChatController extends WebSocket{
   }
 
   emitChangeBlockStatus (target, message) {
-    console.log(target, message)
     this.io.to(parseInt(target)).emit(CONSTANTS.CHANGE_BLOCK_STATUS,
       { message });
   }

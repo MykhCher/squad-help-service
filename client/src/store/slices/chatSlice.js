@@ -194,8 +194,8 @@ const addChatToCatalogExtraReducers = createExtraReducers({
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
-        catalogList[i].chats = payload.chats;
+      if (catalogList[i].id === payload.id) {
+        catalogList[i].conversations = payload.conversations;
         break;
       }
     }
@@ -244,7 +244,7 @@ const deleteCatalogExtraReducers = createExtraReducers({
     const { catalogList } = state;
     const newCatalogList = remove(
       catalogList,
-      catalog => payload.catalogId !== catalog._id
+      catalog => payload.catalogId !== catalog.id
     );
     state.catalogList = [...newCatalogList];
   },
@@ -267,8 +267,8 @@ const removeChatFromCatalogExtraReducers = createExtraReducers({
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
-        catalogList[i].chats = payload.chats;
+      if (catalogList[i].id === payload.id) {
+        catalogList[i].conversations = payload.conversations;
         break;
       }
     }
@@ -294,7 +294,7 @@ const changeCatalogNameExtraReducers = createExtraReducers({
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
+      if (catalogList[i].id === payload.id) {
         catalogList[i].catalogName = payload.catalogName;
         break;
       }
@@ -365,7 +365,7 @@ const reducers = {
   },
 
   changeShowModeCatalog: (state, { payload }) => {
-    state.currentCatalog = { ...state.currentCatalog, ...payload };
+    state.currentCatalog = payload;
     state.isShowChatsInCatalog = !state.isShowChatsInCatalog;
     state.isRenameCatalog = false;
   },

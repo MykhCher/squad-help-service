@@ -15,18 +15,18 @@ function CatalogListContainer(props) {
   }, [])
 
   const removeChatFromCatalog = (event, chatId) => {
-    const { _id } = props.chatStore.currentCatalog;
-    props.removeChatFromCatalog({ chatId, catalogId: _id });
+    const { id } = props.chatStore.currentCatalog;
+    props.removeChatFromCatalog({ chatId, catalogId: id });
     event.stopPropagation();
   };
 
   const getDialogsPreview = () => {
     const { messagesPreview, currentCatalog } = props.chatStore;
-    const { chats } = currentCatalog;
+    const { conversations } = currentCatalog;
     const dialogsInCatalog = [];
     for (let i = 0; i < messagesPreview.length; i++) {
-      for (let j = 0; j < chats.length; j++) {
-        if (chats[j] === messagesPreview[i]._id) {
+      for (let j = 0; j < conversations.length; j++) {
+        if (conversations[j].id === messagesPreview[i].conversationId) {
           dialogsInCatalog.push(messagesPreview[i]);
         }
       }
@@ -35,13 +35,13 @@ function CatalogListContainer(props) {
   };
 
   const { catalogList, isShowChatsInCatalog } = props.chatStore;
-  const { id } = props.userStore.data;
+  const { id: userId } = props.userStore.data;
 
   return (
     <>
       {isShowChatsInCatalog ? (
         <DialogList
-          userId={id}
+          userId={userId}
           preview={getDialogsPreview()}
           removeChat={removeChatFromCatalog}
         />

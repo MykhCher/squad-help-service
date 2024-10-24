@@ -2,7 +2,7 @@ import styles from './Catalog.module.sass';
 
 const Catalog = props => {
   const { deleteCatalog, goToCatalog } = props;
-  const { catalogName, chats, _id } = props.catalog;
+  const { catalogName, conversations, id } = props.catalog;
   return (
     <div
       className={styles.catalogContainer}
@@ -11,10 +11,10 @@ const Catalog = props => {
       <span className={styles.catalogName}>{catalogName}</span>
       <div className={styles.infoContainer}>
         <span>Chats number: </span>
-        <span className={styles.numbers}>{chats.length}</span>
+        <span className={styles.numbers}>{conversations.length}</span>
         <i
           className='fas fa-trash-alt'
-          onClick={event => deleteCatalog(event, _id)}
+          onClick={event => deleteCatalog(event, id)}
         />
       </div>
     </div>

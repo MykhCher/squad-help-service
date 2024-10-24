@@ -218,59 +218,110 @@ module.exports.favoriteChat = async (req, res, next) => {
   res.send(convo);
 };
 
-module.exports.test = async (req, res, next) => {
-  const predicate = 'favoriteList.' +
-    req.body.participants.indexOf(req.tokenData.userId);
-  try {
-    const chat = await Conversation.findOneAndUpdate(
-      { participants: req.body.participants },
-      { $set: { [ predicate ]: req.body.favoriteFlag } }, { new: true });
-    res.send(chat);
-  } catch (err) {
-    res.send(err);
-  }
-};
-
 module.exports.createCatalog = async (req, res, next) => {
-  console.log(req.body);
-  const catalog = new Catalog({
-    userId: req.tokenData.userId,
-    catalogName: req.body.catalogName,
-    chats: [req.body.chatId],
-  });
+  const { body: { catalogName, chatId }, tokenData: { userId } } = req;
+
   try {
-    await catalog.save();
-    res.send(catalog);
-  } catch (err) {
-    next(err);
+    const newCatalog = await db.catalog.create({
+      catalogName,
+      userId
+    });
+
+    const chat = await db.conversation.findOne({ where: { id: chatId } });
+    newCatalog.addConversation(chat);
+    newCatalog.save();
+    
+    newCatalog.dataValues.conversations = [chat];
+  
+    res.json(newCatalog);
+  } catch (error) {
+    console.log(error)
   }
 };
 
 module.exports.updateNameCatalog = async (req, res, next) => {
+  const { body: { catalogId, catalogName }, tokenData: { userId } } = req;
   try {
-    const catalog = await Catalog.findOneAndUpdate({
-      _id: req.body.catalogId,
-      userId: req.tokenData.userId,
-    }, { catalogName: req.body.catalogName }, { new: true });
+    const catalog = await db.catalog.findOne({
+      where: {
+        id: catalogId,
+        userId
+      },
+      include: [
+        {
+          model: db.conversation,
+          attributes: ['id'],
+          through: { attributes: [] }
+        }
+      ]
+    });
+    catalog.catalogName = catalogName;
+    await catalog.save();
+
     res.send(catalog);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    
   }
 };
 
 module.exports.addNewChatToCatalog = async (req, res, next) => {
   try {
-    const catalog = await Catalog.findOneAndUpdate({
-      _id: req.body.catalogId,
-      userId: req.tokenData.userId,
-    }, { $addToSet: { chats: req.body.chatId } }, { new: true });
-    res.send(catalog);
+    // const folder = await db.catalog.findAll({where: {userId: req.tokenData.userId}, include: [{model: db.conversation, through: {attributes: []}}]});
+    const folder = await db.catalog.findOne({
+      where: { 
+        id: req.body.catalogId,
+        userId: req.tokenData.userId
+       },
+       include: [
+        {
+          model: db.conversation,
+          attributes: ['id'],
+          through: { attributes: [] }
+        }
+       ]
+    });
+    const chat = await db.conversation.findOne({where: { id: req.body.chatId }, attributes: ['id']});
+
+    folder.addConversation(chat);
+    await folder.save();
+
+    folder.conversations.push(chat);
+    res.status(200).json(folder);
   } catch (err) {
     next(err);
   }
 };
 
 module.exports.removeChatFromCatalog = async (req, res, next) => {
+  try {
+    // const folder = await db.catalog.findAll({where: {userId: req.tokenData.userId}, include: [{model: db.conversation, through: {attributes: []}}]});
+    const folder = await db.catalog.findOne({
+      where: { 
+        id: req.body.catalogId,
+        userId: req.tokenData.userId
+       },
+       include: [
+        {
+          model: db.conversation,
+          attributes: ['id'],
+          through: { attributes: [] }
+        }
+       ]
+    });
+    const chat = await db.conversation.findOne({where: { id: req.body.chatId }, attributes: ['id']});
+
+    folder.removeConversation(chat);
+    await folder.save();
+
+    folder.conversations = folder.conversations.filter(c => c.id !== chat.id);
+    console.log(folder.conversations)
+    res.status(200).json(folder);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.test = async (req, res, next) => {
   try {
     const catalog = await Catalog.findOneAndUpdate({
       _id: req.body.catalogId,
@@ -283,29 +334,35 @@ module.exports.removeChatFromCatalog = async (req, res, next) => {
 };
 
 module.exports.deleteCatalog = async (req, res, next) => {
+  const { body: { catalogId }, tokenData: {userId} } = req;
   try {
-    await Catalog.remove(
-      { _id: req.body.catalogId, userId: req.tokenData.userId });
+    await db.catalog.destroy({
+      where: {
+        id: catalogId,
+        userId
+      }
+    });
     res.end();
   } catch (err) {
-    next(err);
+    console.log(err);
   }
 };
 
-module.exports.getCatalogs = async (req, res, next) => {
+module.exports.getCatalogs = async (req, res) => {
   try {
-    const catalogs = await Catalog.aggregate([
-      { $match: { userId: req.tokenData.userId } },
-      {
-        $project: {
-          _id: 1,
-          catalogName: 1,
-          chats: 1,
-        },
-      },
-    ]);
+    const catalogs = await db.catalog.findAll({
+      where: {userId: req.tokenData.userId},
+      include: [
+        {
+          model: db.conversation,
+          attributes: ['id']
+        }
+      ]
+    });
+    
     res.send(catalogs);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    console.log(error)
+    next(error)
   }
-};
+}
