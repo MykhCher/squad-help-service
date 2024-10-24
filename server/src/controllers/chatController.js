@@ -170,28 +170,55 @@ module.exports.getPreview = async (req, res, next) => {
   
 }
 
-module.exports.test = async (req, res) => {
-  res.json(await chatQueries.getPreviews(1));
+module.exports.blackList = async (req, res) => {
+  const convo = await chatQueries.findConvoByUsers(req.body.participants)
+  await db.usersConversations.update(
+    {blackList: req.body.blackListFlag}, 
+    {
+      where: {
+        conversationId: convo.dataValues.id,
+        userId: req.tokenData.userId
+      }
+    }
+  );
+
+  const interlocutorId = req.body.participants.filter(
+    (participant) => participant !== req.tokenData.userId)[ 0 ];
+
+  convo.dataValues.blackList = [req.body.blackListFlag];
+  convo.dataValues.participants = req.body.participants;
+  convo.Users.forEach(user => {
+    convo.dataValues.blackList.push(user.usersConversations.blackList)
+  })
+
+  controller.getChatController().emitChangeBlockStatus(interlocutorId, convo);
+
+  res.send(convo);
 }
 
 
-module.exports.blackList = async (req, res, next) => {
-  const predicate = 'blackList.' +
-    req.body.participants.indexOf(req.tokenData.userId);
-  try {
-    const chat = await Conversation.findOneAndUpdate(
-      { participants: req.body.participants },
-      { $set: { [ predicate ]: req.body.blackListFlag } }, { new: true });
-    res.send(chat);
-    const interlocutorId = req.body.participants.filter(
-      (participant) => participant !== req.tokenData.userId)[ 0 ];
-    controller.getChatController().emitChangeBlockStatus(interlocutorId, chat);
-  } catch (err) {
-    res.send(err);
-  }
+module.exports.favoriteChat = async (req, res, next) => {
+  const convo = await chatQueries.findConvoByUsers(req.body.participants)
+  await db.usersConversations.update(
+    {favoriteList: req.body.favoriteFlag}, 
+    {
+      where: {
+        conversationId: convo.dataValues.id,
+        userId: req.tokenData.userId
+      }
+    }
+  );
+
+  convo.dataValues.favoriteList = [req.body.favoriteFlag];
+  convo.dataValues.participants = req.body.participants;
+  convo.Users.forEach(user => {
+    convo.dataValues.favoriteList.push(user.usersConversations.favoriteList)
+  });
+
+  res.send(convo);
 };
 
-module.exports.favoriteChat = async (req, res, next) => {
+module.exports.test = async (req, res, next) => {
   const predicate = 'favoriteList.' +
     req.body.participants.indexOf(req.tokenData.userId);
   try {

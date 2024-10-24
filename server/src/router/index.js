@@ -17,7 +17,7 @@ const upload = require('../utils/fileUpload');
 const router = express.Router();
 
 // TEMPORARY
-router.get('/test', checkToken.checkToken, chatController.test);
+router.post('/test', checkToken.checkToken, chatController.test);
 
 router.route('/events')
   .get(checkToken.checkToken, eventController.getAllEvents)

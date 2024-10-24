@@ -1,10 +1,15 @@
-const { conversation, usersConversations, Users, message, Sequelize: { Op, literal } } = require("../../models");
-const db = require("../../models");
+const { 
+  conversation, 
+  usersConversations, 
+  Users, 
+  message, 
+  Sequelize: { Op, literal } 
+} = require("../../models");
 
 const findConvoByUsers = async (participants) => {
   const [senderConvos, receiverConvos] = await Promise.all(participants.map(async id => {
     return await conversation.findAll({
-      include: [{model: Users, through: { attributes: [] }, where: { id }}]
+      include: [{model: Users, through: { attributes: ['blackList', 'favoriteList'] }, where: { id }}]
     });
   }));
 
@@ -61,6 +66,7 @@ module.exports.findMessages = async (participants) => {
 
 module.exports.getPreviews = async (userId) => {
   const conversations = await conversation.findAll({
+    attributes: ['id'],
     include: [{
       model: Users,
       where: {
@@ -69,40 +75,15 @@ module.exports.getPreviews = async (userId) => {
       through: { attributes: [] },
       attributes: [],
     }],
-    attributes: ['id']
   });
 
   const convoIds = conversations.map(convo => convo.id);
 
-  // const previews = await message.findAll({
-  //   attributes: [literal(`DISTINCT ON("conversationId") "body"`), 'body', 'createdAt', 'sender', 'id'],
-  //   where: {
-  //     conversationId: { [Op.in]: convoIds },
-  //   },
-  //   include: [{
-  //     model: conversation,
-  //     attributes: ['id'],
-  //     include: [{
-  //       model: Users,
-  //       through: { attributes: ['blackList', 'favoriteList'] },
-  //       attributes: ['id']
-  //     }]
-  //   }],
-  //   limit: convoIds.length
-  // });
-
-  // const test = await message.findAll({
-  //   attributes: [
-  //     [db.Sequelize.fn('max', db.Sequelize.col('createdAt')), 'createdAt'], 'conversationId'
-  //   ],
-  //   group: 'conversationId'
-  // });
-
   const previews = await message.findAll({
-    attributes: ['id', 'body', 'sender', 'conversationId', 'createdAt'], // Select all required fields
+    attributes: ['id', 'body', 'sender', 'conversationId', 'createdAt'],
     where: {
       createdAt: {
-        [Op.eq]: db.Sequelize.literal(`(
+        [Op.eq]: literal(`(
           SELECT MAX(m."createdAt")
           FROM messages AS m
           WHERE m."conversationId" = message."conversationId"
