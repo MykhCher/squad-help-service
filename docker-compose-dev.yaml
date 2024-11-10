@@ -49,5 +49,20 @@ services:
     ports:
       - "12346:5432"
 
+  admin-dev: 
+    container_name: exam-freshcode-admin-dev
+    build: 
+      context: ./admin
+    
+    environment:
+      NODE_ENV: development
+    ports: 
+      - "2030:2030"
+    depends_on:
+      - db-dev
+    volumes: 
+      - ./admin:/admin
+      - /admin/node_modules
+
 volumes:
   server-dev:
