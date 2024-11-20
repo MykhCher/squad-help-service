@@ -4,7 +4,7 @@ const { Token } = require('../../models');
 const { JWT_SECRET, REFRESH_SECRET } = require('../../constants');
 
 module.exports.generateTokens = async (userData) => {
-  const accessToken = jwt.sign(userData, JWT_SECRET, { expiresIn: '2s' });
+  const accessToken = jwt.sign(userData, JWT_SECRET, { expiresIn: '1h' });
   const refreshToken = jwt.sign(userData, REFRESH_SECRET, { expiresIn: '30d' });
  
   return {
