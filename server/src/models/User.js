@@ -74,8 +74,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.associate = function (models) {
-    User.hasMany(models.RefreshToken,
-      { foreignKey: 'user_id', targetKey: 'id' });
+    User.hasMany(models.Token,
+      { foreignKey: 'userId', sourceKey: 'id' });
   };
 
   return User;

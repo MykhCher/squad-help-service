@@ -48,6 +48,11 @@ db[ 'Ratings' ].belongsTo(db[ 'Users' ],
 db[ 'Ratings' ].belongsTo(db[ 'Offers' ],
   { foreignKey: 'offerId', targetKey: 'id' });
 
+db[ 'Users' ].hasMany(db[ 'Token' ],
+  { foreignKey: 'userId', sourceKey: 'id' });
+db[ 'Token' ].belongsTo(db[ 'Users' ], 
+  { foreignKey: 'userId', targetKey: 'id' });
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
