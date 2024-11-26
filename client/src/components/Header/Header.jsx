@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaRegBell } from "react-icons/fa";
 // =====
-import { getNotifications } from '../../api/rest/restController'
+import { eventController } from '../../api/ws/socketController';
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import withRouter from '../../hocs/withRouter';
@@ -13,13 +13,22 @@ import Logo from '../Logo';
 
 function Header(props) {
 
-  const [ notifications, setNotifications ] = useState(0);
+  const notifications = useSelector(state => state.events.count)
 
   useEffect(() => {
     if (!props.data) {
       props.getUser();
+    } 
+    return () => {
+      props.data ? eventController.unsubscribeEvent(props.data.id) : ''
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      eventController.subscribeEvent(props.data.id);
+    } catch (error) {}
+  }, [props.data]);
 
   const logOut = () => {
     localStorage.clear();
@@ -33,9 +42,6 @@ function Header(props) {
 
   const renderLoginButtons = () => {
     if (props.data) {
-
-      getNotifications()
-        .then(({data}) => {setNotifications(data)});
 
       return (
         <>

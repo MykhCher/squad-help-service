@@ -1,6 +1,10 @@
 .idea/
 .vscode/
 
+admin/node_modules
+admin/.adminjs
+admin/.env
+
 ./client/node_modules/
 ./server/node_modules/
 ./server/uploadFiles
@@ -9,5 +13,6 @@
 
 ./server/public/images
 .server/public/images
+server/src/logs/*
 **server/public/*
 *server/public/*
