@@ -1,8 +1,10 @@
+import { useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 // =====
 import { getEvents, createEvent, deleteEvent } from '../../api/rest/restController';
 import EventTimer from '../../components/EventTimer/EventTimer';
 import EventForm from '../../components/EventForm/EventForm';
+import { removeEvent } from '../../store/slices/eventsSlice';
 // =====
 import styles from './Events.module.sass';
 
@@ -10,6 +12,8 @@ function Events() {
 
     const [ timers, setTimers ] = useState([]);
     const formRef = useRef();
+
+    const dispatch = useDispatch();
 
     const setSortedTimers = (arr) => {
         const newTimers = arr.sort((a, b) => new Date(a.eventTime).getTime()-new Date(b.eventTime).getTime());
@@ -35,6 +39,7 @@ function Events() {
         setSortedTimers(newTimers);
         
         deleteEvent({id});
+        dispatch(removeEvent());
     }
 
     return (

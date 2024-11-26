@@ -1,10 +1,10 @@
-import { toast } from 'react-toastify';
-import React from 'react';
 import ChatSocket from './sockets/ChatSocket';
 import NotificationSocket from './sockets/NotificationSocket';
+import EventSocket from './sockets/EventSocket';
 
 export let controller;
 export let chatController;
+export let eventController;
 
 export const initSocket = store => {
   controller = new NotificationSocket(
@@ -13,5 +13,6 @@ export const initSocket = store => {
     'notifications'
   );
   chatController = new ChatSocket(store.dispatch, store.getState, 'chat');
+  eventController = new EventSocket(store.dispatch, store.getState, 'events')
   return store;
 };
