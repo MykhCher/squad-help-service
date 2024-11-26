@@ -1,7 +1,8 @@
 import http from '../interceptor';
 
 export const registerRequest = data => http.post('registration', data);
-export const loginRequest = data => http.post('login', data);
+export const loginRequest = data => http.post('login', data, { withCredentials: true });
+export const logoutRequest = () => http.get('logout', { withCredentials: true });
 export const getUser = () => http.post('getUser');
 export const updateContest = data => http.post('updateContest', data);
 export const setNewOffer = data => http.post('setNewOffer', data);

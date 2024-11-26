@@ -7,6 +7,10 @@
 ./server/upload
 ./server/public
 
+admin/node_modules
+admin/.env
+admin/.adminjs/
+
 ./server/public/images
 .server/public/images
 **server/public/*

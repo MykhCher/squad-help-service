@@ -61,11 +61,12 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = function (models) {
-    // User.hasMany(models.Orders, { foreignKey: 'user_id', sourceKey: 'id' });
-    // User.hasMany(models.Participant, { foreignKey: 'user_id', sourceKey: 'id' });
-    // User.hasMany(models.RefreshToken, { foreignKey: 'user_id', sourceKey: 'id' });
-    
     User.hasMany(models.Offers, { foreignKey: 'userId', sourceKey: 'id' });
+    User.hasMany(models.Token, { 
+      foreignKey: 'userId', 
+      sourceKey: 'id' 
+    });
+    
     User.belongsToMany(models.conversation, {
       through: 'usersConversations',
       foreignKey: 'userId',

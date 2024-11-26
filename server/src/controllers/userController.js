@@ -11,25 +11,40 @@ const ratingQueries = require('./queries/ratingQueries');
 
 module.exports.login = async (req, res, next) => {
   try {
-    const foundUser = await userQueries.findUser({ email: req.body.email });
-    await userQueries.passwordCompare(req.body.password, foundUser.password);
-    const accessToken = jwt.sign({
-      firstName: foundUser.firstName,
-      userId: foundUser.id,
-      role: foundUser.role,
-      lastName: foundUser.lastName,
-      avatar: foundUser.avatar,
-      displayName: foundUser.displayName,
-      balance: foundUser.balance,
-      email: foundUser.email,
-      rating: foundUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
-    await userQueries.updateUser({ accessToken }, foundUser.id);
-    res.send({ token: accessToken });
+    const { email, password } = req.body;
+    const userData = await userQueries.login(email, password);
+
+    res.cookie('refreshToken', userData.refreshToken, { maxAge: 30*24*60*60*1000, httpOnly: true });
+    return res.send({ token: userData.accessToken });
   } catch (err) {
     next(err);
   }
 };
+
+module.exports.logout = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.cookies;
+    const deleted = await bd.Token.destroy({ where: { refreshToken } });
+
+    res.clearCookie('refreshToken');
+    res.status(200).json(deleted);
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports.refresh = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.cookies;
+    const userData = await userQueries.refresh(refreshToken);
+
+    res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
+    return res.send(userData);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports.registration = async (req, res, next) => {
   try {
     const newUser = await userQueries.userCreation(

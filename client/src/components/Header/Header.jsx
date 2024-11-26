@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaRegBell } from "react-icons/fa";
 // =====
-import { getNotifications } from '../../api/rest/restController'
+import { getNotifications, logoutRequest } from '../../api/rest/restController'
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import withRouter from '../../hocs/withRouter';
@@ -22,6 +22,7 @@ function Header(props) {
   }, []);
 
   const logOut = () => {
+    logoutRequest();
     localStorage.clear();
     props.clearUserStore();
     props.navigate('/login', { replace: true });
@@ -34,8 +35,8 @@ function Header(props) {
   const renderLoginButtons = () => {
     if (props.data) {
 
-      getNotifications()
-        .then(({data}) => {setNotifications(data)});
+      // getNotifications()
+      //   .then(({data}) => {setNotifications(data)});
 
       return (
         <>
