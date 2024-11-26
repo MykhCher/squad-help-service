@@ -1,9 +1,10 @@
 import { connect, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FaRegBell } from "react-icons/fa";
 // =====
 import { eventController } from '../../api/ws/socketController';
+import { logoutRequest } from '../../api/rest/restController';
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import withRouter from '../../hocs/withRouter';
